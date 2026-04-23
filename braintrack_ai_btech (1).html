@@ -1,0 +1,600 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans)}
+.app{max-width:680px;margin:0 auto;padding:12px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.tab{padding:7px 13px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);font-size:13px;cursor:pointer;background:transparent;color:var(--color-text-secondary)}
+.tab.active{background:var(--color-background-info);color:var(--color-text-info);border-color:var(--color-border-info)}
+.panel{display:none}.panel.active{display:block}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:16px;margin-bottom:12px}
+label{font-size:13px;color:var(--color-text-secondary);display:block;margin-bottom:4px}
+input,select,textarea{width:100%;padding:8px 10px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);font-size:14px;background:var(--color-background-secondary);color:var(--color-text-primary);font-family:var(--font-sans)}
+textarea{resize:vertical;min-height:100px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.btn{padding:8px 16px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);font-size:13px;cursor:pointer;background:transparent;color:var(--color-text-primary)}
+.btn:hover{background:var(--color-background-secondary)}
+.btn-primary{background:var(--color-background-info);color:var(--color-text-info);border-color:var(--color-border-info)}
+.btn-primary:hover{opacity:0.85}
+.result-box{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:12px;margin-top:10px;font-size:14px;line-height:1.6;white-space:pre-wrap;min-height:60px;color:var(--color-text-primary)}
+.exam-list{margin-top:10px}
+.exam-item{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);margin-bottom:6px;font-size:13px}
+.chip{display:inline-block;padding:2px 8px;border-radius:99px;font-size:11px;margin:2px}
+.mood-bar-wrap{margin:8px 0;background:var(--color-background-secondary);border-radius:99px;height:8px;overflow:hidden}
+.mood-bar{height:100%;border-radius:99px;transition:width 0.4s,background 0.4s;width:0%}
+.mood-label{font-size:12px;color:var(--color-text-secondary);margin-bottom:4px}
+.predict-wrap{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0;min-height:30px}
+.predict-btn{padding:4px 10px;border:0.5px solid var(--color-border-secondary);border-radius:99px;font-size:12px;cursor:pointer;background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.predict-btn:hover{background:var(--color-background-info);color:var(--color-text-info)}
+.checklist-item{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:14px}
+.checklist-item input[type=checkbox]{width:16px;height:16px;accent-color:#185FA5}
+.q-block{padding:10px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.q-block p{font-size:14px;margin-bottom:8px}
+.q-block input{margin-bottom:0}
+.score-box{padding:14px;text-align:center;border-radius:var(--border-radius-md);background:var(--color-background-info);color:var(--color-text-info);font-size:22px;font-weight:500;margin-bottom:10px}
+.spin{display:inline-block;animation:spin 1s linear infinite;margin-right:6px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.diary-unlock{text-align:center;padding:20px}
+.diary-unlock input{max-width:180px;text-align:center;font-size:18px;letter-spacing:6px;margin:10px auto;display:block}
+</style>
+
+<div class="app">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+    <div style="width:32px;height:32px;border-radius:8px;background:var(--color-background-info);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--color-text-info)">B</div>
+    <div>
+      <div style="font-size:17px;font-weight:500;color:var(--color-text-primary)">BrainTrack AI</div>
+      <div style="font-size:12px;color:var(--color-text-secondary)">Smart BTech study companion</div>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('exam')">Exam Calendar</button>
+    <button class="tab" onclick="showTab('health')">Health Tracker</button>
+    <button class="tab" onclick="showTab('diary')">Private Diary</button>
+    <button class="tab" onclick="showTab('checklist')">Prep Checklist</button>
+    <button class="tab" onclick="showTab('mock')">Mock Test</button>
+  </div>
+
+  <!-- EXAM CALENDAR -->
+  <div id="tab-exam" class="panel active">
+    <div class="card">
+      <div class="row">
+        <div>
+          <label>Subject</label>
+          <select id="exam-subject">
+            <option value="">Select subject</option>
+            <option>Data Structures & Algorithms</option>
+            <option>Operating Systems</option>
+            <option>Database Management Systems</option>
+            <option>Computer Networks</option>
+            <option>Object Oriented Programming</option>
+            <option>Machine Learning</option>
+            <option>Artificial Intelligence</option>
+            <option>Software Engineering</option>
+            <option>Theory of Computation</option>
+            <option>Compiler Design</option>
+            <option>Computer Architecture</option>
+            <option>Digital Electronics</option>
+            <option>Discrete Mathematics</option>
+            <option>Probability & Statistics</option>
+            <option>Linear Algebra</option>
+            <option>Engineering Mathematics</option>
+            <option>Web Technologies</option>
+            <option>Cloud Computing</option>
+            <option>Cybersecurity</option>
+            <option>Data Science</option>
+            <option>Deep Learning</option>
+            <option>Computer Graphics</option>
+            <option>Microprocessors</option>
+            <option>Signals & Systems</option>
+            <option>Control Systems</option>
+          </select>
+        </div>
+        <div>
+          <label>Exam date</label>
+          <input type="date" id="exam-date">
+        </div>
+      </div>
+      <div style="margin-bottom:10px">
+        <label>Difficulty</label>
+        <select id="exam-diff">
+          <option>Easy</option><option selected>Medium</option><option>Hard</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" onclick="addExam()">+ Add Exam</button>
+    </div>
+    <div class="exam-list" id="exam-list"></div>
+    <button class="btn btn-primary" style="width:100%" onclick="genStudyPlan()">Generate AI Study Plan ↗</button>
+    <div class="result-box" id="exam-result" style="display:none"></div>
+  </div>
+
+  <!-- HEALTH TRACKER -->
+  <div id="tab-health" class="panel">
+    <div class="card">
+      <div style="margin-bottom:10px">
+        <label>Sleep last night (hours)</label>
+        <input type="range" min="0" max="12" value="7" step="0.5" id="sleep-val" oninput="document.getElementById('sleep-out').textContent=this.value+'h'">
+        <span id="sleep-out" style="font-size:13px;color:var(--color-text-secondary)">7h</span>
+      </div>
+      <div style="margin-bottom:10px">
+        <label>Energy level (1–10)</label>
+        <input type="range" min="1" max="10" value="6" step="1" id="energy-val" oninput="document.getElementById('energy-out').textContent=this.value">
+        <span id="energy-out" style="font-size:13px;color:var(--color-text-secondary)">6</span>
+      </div>
+      <div style="margin-bottom:10px">
+        <label>Exercise today</label>
+        <select id="exercise-val">
+          <option>None</option><option>Light walk</option><option>Yoga / stretching</option><option>Gym workout</option><option>Sports</option><option>Running / cycling</option>
+        </select>
+      </div>
+      <div style="margin-bottom:10px">
+        <label>Current stress level</label>
+        <select id="stress-val">
+          <option>Low – feeling calm</option><option selected>Medium – manageable</option><option>High – overwhelmed</option><option>Very high – anxious/panicking</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" style="width:100%" onclick="genWellness()">Get AI Wellness Advice ↗</button>
+      <div class="result-box" id="health-result" style="display:none"></div>
+    </div>
+  </div>
+
+  <!-- DIARY -->
+  <div id="tab-diary" class="panel">
+    <div id="diary-lock" class="card diary-unlock">
+      <div style="font-size:15px;margin-bottom:6px">Private diary — enter PIN</div>
+      <input type="password" id="pin-input" maxlength="4" placeholder="····" oninput="checkPin(this.value)">
+      <div style="font-size:12px;color:var(--color-text-secondary);margin-top:4px">Demo PIN: 1234</div>
+    </div>
+    <div id="diary-content" style="display:none">
+      <div class="card">
+        <label>Today's date</label>
+        <input type="date" id="diary-date" style="margin-bottom:10px">
+        <label>How are you feeling?</label>
+        <div class="mood-label" id="mood-label">Mood: neutral</div>
+        <div class="mood-bar-wrap"><div class="mood-bar" id="mood-bar"></div></div>
+        <textarea id="diary-text" placeholder="Write your thoughts here…" oninput="onDiaryInput(this.value)" rows="5"></textarea>
+        <div class="predict-wrap" id="predict-wrap"></div>
+        <div style="display:flex;gap:8px;margin-top:10px">
+          <button class="btn btn-primary" style="flex:1" onclick="saveDiary()">Save + Get AI Reflection ↗</button>
+          <button class="btn" onclick="clearDiary()">Clear</button>
+        </div>
+        <div class="result-box" id="diary-result" style="display:none"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHECKLIST -->
+  <div id="tab-checklist" class="panel">
+    <div class="card">
+      <label>Subject</label>
+      <select id="check-subject" style="margin-bottom:10px">
+        <option value="">Select subject</option>
+        <option>Data Structures & Algorithms</option>
+        <option>Operating Systems</option>
+        <option>Database Management Systems</option>
+        <option>Computer Networks</option>
+        <option>Object Oriented Programming</option>
+        <option>Machine Learning</option>
+        <option>Artificial Intelligence</option>
+        <option>Software Engineering</option>
+        <option>Theory of Computation</option>
+        <option>Compiler Design</option>
+        <option>Computer Architecture</option>
+        <option>Digital Electronics</option>
+        <option>Discrete Mathematics</option>
+        <option>Probability & Statistics</option>
+        <option>Linear Algebra</option>
+        <option>Engineering Mathematics</option>
+        <option>Web Technologies</option>
+        <option>Cloud Computing</option>
+        <option>Cybersecurity</option>
+        <option>Data Science</option>
+        <option>Deep Learning</option>
+        <option>Computer Graphics</option>
+        <option>Microprocessors</option>
+        <option>Signals & Systems</option>
+        <option>Control Systems</option>
+      </select>
+      <button class="btn btn-primary" style="width:100%" onclick="genChecklist()">Generate AI Checklist ↗</button>
+      <div id="checklist-result" style="display:none;margin-top:12px"></div>
+    </div>
+  </div>
+
+  <!-- MOCK TEST -->
+  <div id="tab-mock" class="panel">
+    <div class="card">
+      <label>Subject for mock test</label>
+      <select id="mock-subject" style="margin-bottom:10px">
+        <option value="">Select subject</option>
+        <option>Data Structures & Algorithms</option>
+        <option>Operating Systems</option>
+        <option>Database Management Systems</option>
+        <option>Computer Networks</option>
+        <option>Object Oriented Programming</option>
+        <option>Machine Learning</option>
+        <option>Artificial Intelligence</option>
+        <option>Software Engineering</option>
+        <option>Theory of Computation</option>
+        <option>Compiler Design</option>
+        <option>Computer Architecture</option>
+        <option>Digital Electronics</option>
+        <option>Discrete Mathematics</option>
+        <option>Web Technologies</option>
+        <option>Cloud Computing</option>
+        <option>Cybersecurity</option>
+      </select>
+      <button class="btn btn-primary" style="width:100%" onclick="genMock()">Generate Mock Test ↗</button>
+    </div>
+    <div id="mock-questions" style="display:none"></div>
+    <div id="mock-result" style="display:none"></div>
+  </div>
+</div>
+
+<script>
+var exams=[];
+var mockQs=[];
+
+function showTab(t){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+t).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function addExam(){
+  var s=document.getElementById('exam-subject').value;
+  var d=document.getElementById('exam-date').value;
+  var diff=document.getElementById('exam-diff').value;
+  if(!s||!d){alert('Select a subject and date');return;}
+  exams.push({subject:s,date:d,diff:diff});
+  renderExams();
+}
+
+function renderExams(){
+  var el=document.getElementById('exam-list');
+  el.innerHTML='';
+  exams.forEach(function(e,i){
+    var days=Math.ceil((new Date(e.date)-new Date())/(86400000));
+    el.innerHTML+='<div class="exam-item"><div><strong>'+e.subject+'</strong><br><span style="font-size:12px;color:var(--color-text-secondary)">'+e.date+' · '+e.diff+'</span></div><div style="display:flex;align-items:center;gap:8px"><span class="chip" style="background:var(--color-background-warning);color:var(--color-text-warning)">'+days+'d left</span><button class="btn" style="padding:2px 8px;font-size:12px" onclick="exams.splice('+i+',1);renderExams()">x</button></div></div>';
+  });
+}
+
+async function callClaude(prompt){
+  try{
+    var r=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        messages:[{role:'user',content:prompt}]
+      })
+    });
+    var d=await r.json();
+    if(d.content&&d.content[0])return d.content[0].text;
+    return null;
+  }catch(e){return null;}
+}
+
+function setResult(id,text){
+  var el=document.getElementById(id);
+  el.style.display='block';
+  el.textContent=text;
+}
+
+function setLoading(id){
+  var el=document.getElementById(id);
+  el.style.display='block';
+  el.innerHTML='<span class="spin">⟳</span> Generating...';
+}
+
+async function genStudyPlan(){
+  if(exams.length===0){alert('Add at least one exam first');return;}
+  setLoading('exam-result');
+  var list=exams.map(function(e){return e.subject+' on '+e.date+' ('+e.diff+')'}).join(', ');
+  var fallback='Here is a personalized study plan:\n\n';
+  exams.forEach(function(e){
+    var days=Math.ceil((new Date(e.date)-new Date())/(86400000));
+    fallback+='📚 '+e.subject+' ('+days+' days left)\n';
+    if(days<=3) fallback+='• Day 1: Quick revision of all key topics\n• Day 2: Practice previous year questions\n• Day 3: Formula sheet & mock test\n\n';
+    else if(days<=7) fallback+='• Days 1-2: Core concepts & theory\n• Days 3-4: Numerical problems & coding\n• Days 5-6: Previous papers\n• Day 7: Revision & rest\n\n';
+    else fallback+='• Week 1: Read notes & understand concepts\n• Week 2: Solve exercises\n• Week 3: Previous year papers\n• Final days: Revision & mock tests\n\n';
+  });
+  var prompt='Create a detailed day-by-day BTech exam study plan for these exams: '+list+'. Include specific topics, revision strategy, and tips. Keep it concise and practical.';
+  var res=await callClaude(prompt);
+  setResult('exam-result', res||fallback);
+}
+
+async function genWellness(){
+  setLoading('health-result');
+  var sleep=document.getElementById('sleep-val').value;
+  var energy=document.getElementById('energy-val').value;
+  var exercise=document.getElementById('exercise-val').value;
+  var stress=document.getElementById('stress-val').value;
+  var fallback='Based on your health data:\n\n';
+  if(parseFloat(sleep)<6) fallback+='• You need more sleep! Aim for 7-8 hours.\n';
+  if(parseInt(energy)<4) fallback+='• Low energy detected. Take short breaks every 45 mins.\n';
+  if(exercise==='None') fallback+='• Try a 20-min walk today to boost focus.\n';
+  if(stress.includes('High')||stress.includes('anxious')) fallback+='• Practice 4-7-8 breathing: inhale 4s, hold 7s, exhale 8s.\n';
+  fallback+='\nStay consistent and take care of yourself!';
+  var prompt='I am a BTech student. Sleep: '+sleep+' hours, energy: '+energy+'/10, exercise: '+exercise+', stress: '+stress+'. Give me personalized wellness advice to improve focus and manage exam stress. Keep it practical and motivating.';
+  var res=await callClaude(prompt);
+  setResult('health-result', res||fallback);
+}
+
+function checkPin(v){
+  if(v==='1234'){
+    document.getElementById('diary-lock').style.display='none';
+    document.getElementById('diary-content').style.display='block';
+    var today=new Date().toISOString().split('T')[0];
+    document.getElementById('diary-date').value=today;
+  }
+}
+
+var predictWords={
+  'fe':['feel','feeling','felt','feelings'],
+  'st':['stressed','struggling','studying','started'],
+  'ha':['happy','hard','have','hate'],
+  'lo':['lonely','lost','love','low'],
+  'ti':['tired','time','today','trying'],
+  'an':['anxious','angry','another','any'],
+  'ex':['exam','excited','exhausted','extra'],
+  'no':['not','now','nothing','notes'],
+  'sa':['sad','same','save','scared'],
+  'wo':['worried','working','wonderful','worst'],
+  'pr':['prepared','practice','pressure','proud'],
+  'ca':['can','cannot','calm','care'],
+  'mo':['motivated','more','morning','mood'],
+  'co':['confused','completed','confident','could'],
+  'he':['help','heavy','here','helped'],
+  'di':['difficult','distracted','done','disappointed'],
+  'su':['success','support','suddenly','sure'],
+  'un':['understand','upset','unable','unfair'],
+  'be':['better','because','been','believe'],
+  'go':['good','going','got','goals']
+};
+
+function onDiaryInput(text){
+  updateMood(text);
+  updatePredictions(text);
+}
+
+function updateMood(text){
+  var t=text.toLowerCase();
+  var bar=document.getElementById('mood-bar');
+  var label=document.getElementById('mood-label');
+  
+  var negPhrases=['not feeling good','not good','not well','not happy','dont feel','don\'t feel','not okay','not ok','feeling down','not great','not fine','lost my','no motivation','can\'t focus','cannot focus','don\'t want','dont want','nothing matters','what\'s the point','whats the point','no point'];
+  var isNegPhrase=negPhrases.some(function(p){return t.includes(p);});
+  
+  var scores={
+    stressed:0,anxious:0,lonely:0,sad:0,dull:0,happy:0,motivated:0,neutral:0,angry:0
+  };
+  
+  if(isNegPhrase){
+    scores.sad+=3;scores.dull+=2;
+  }
+  
+  var patterns=[
+    {words:['stressed','stress','pressure','overwhelm','too much','so much work'],key:'stressed',w:2},
+    {words:['anxious','anxiety','nervous','panic','scared','fear','afraid','worry','worried'],key:'anxious',w:2},
+    {words:['lonely','alone','isolated','no one','nobody','no friends','miss everyone'],key:'lonely',w:2},
+    {words:['sad','unhappy','cry','crying','tears','heartbroken','depressed','hopeless','helpless'],key:'sad',w:2},
+    {words:['dull','bored','boring','tired','exhausted','sleepy','fatigue','low energy','unmotivated','demotivated','no energy'],key:'dull',w:2},
+    {words:['angry','frustrated','irritated','annoyed','mad','furious','hate this'],key:'angry',w:2},
+    {words:['happy','excited','great','wonderful','amazing','love','enjoy','fantastic'],key:'happy',w:2},
+    {words:['motivated','focused','confident','proud','achieved','accomplished','ready','productive'],key:'motivated',w:2}
+  ];
+  
+  patterns.forEach(function(p){
+    p.words.forEach(function(word){
+      if(t.includes(word)) scores[p.key]+=p.w;
+    });
+  });
+  
+  var topMood='neutral';var topScore=0;
+  Object.keys(scores).forEach(function(k){if(scores[k]>topScore){topScore=scores[k];topMood=k;}});
+  
+  var moodMap={
+    stressed:{label:'Stressed',color:'#E24B4A',bg:'#FCEBEB',pct:75},
+    anxious:{label:'Anxious',color:'#BA7517',bg:'#FAEEDA',pct:70},
+    lonely:{label:'Lonely',color:'#533AB7',bg:'#EEEDFE',pct:60},
+    sad:{label:'Sad',color:'#378ADD',bg:'#E6F1FB',pct:55},
+    dull:{label:'Dull / Low energy',color:'#888780',bg:'#F1EFE8',pct:45},
+    angry:{label:'Frustrated',color:'#D85A30',bg:'#FAECE7',pct:80},
+    happy:{label:'Happy',color:'#3B6D11',bg:'#EAF3DE',pct:85},
+    motivated:{label:'Motivated',color:'#0F6E56',bg:'#E1F5EE',pct:95},
+    neutral:{label:'Neutral',color:'#5F5E5A',bg:'#F1EFE8',pct:50}
+  };
+  
+  var m=moodMap[topMood]||moodMap.neutral;
+  bar.style.width=m.pct+'%';
+  bar.style.background=m.color;
+  label.textContent='Mood: '+m.label;
+  label.style.color=m.color;
+  bar.dataset.mood=topMood;
+}
+
+function updatePredictions(text){
+  var wrap=document.getElementById('predict-wrap');
+  wrap.innerHTML='';
+  var words=text.split(/\s+/);
+  var last=words[words.length-1]||'';
+  if(last.length<2){return;}
+  var key=last.slice(0,2).toLowerCase();
+  var suggestions=predictWords[key]||[];
+  suggestions=suggestions.filter(function(w){return w.toLowerCase().startsWith(last.toLowerCase())&&w.toLowerCase()!==last.toLowerCase();});
+  suggestions.slice(0,5).forEach(function(w){
+    var btn=document.createElement('button');
+    btn.className='predict-btn';
+    btn.textContent=w;
+    btn.onclick=function(){
+      var ta=document.getElementById('diary-text');
+      var parts=ta.value.split(/\s+/);
+      parts[parts.length-1]=w;
+      ta.value=parts.join(' ')+' ';
+      onDiaryInput(ta.value);
+      ta.focus();
+    };
+    wrap.appendChild(btn);
+  });
+}
+
+async function saveDiary(){
+  var text=document.getElementById('diary-text').value.trim();
+  if(!text){alert('Write something first');return;}
+  var mood=document.getElementById('mood-bar').dataset.mood||'neutral';
+  setLoading('diary-result');
+  
+  var motivational=['You are stronger than you think! Every BTech student goes through tough phases. Tomorrow is a new day.','Hang in there! Challenges are just opportunities in disguise. You have got this!','Every great engineer had days like this. Rest, reset, and come back stronger.','You are not alone in this journey. Reach out to friends or faculty — you will feel better.'];
+  var encouraging=['Keep up this amazing energy! Your positivity will carry you through exams!','This attitude will take you places! Keep channeling this wonderful energy!','Your enthusiasm is inspiring! Use this momentum for your next study session!'];
+  
+  var fallbackMap={
+    stressed:'I can feel the pressure you are under. Take a deep breath — break your tasks into smaller steps, tackle one at a time. You can do this.',
+    anxious:motivational[Math.floor(Math.random()*motivational.length)],
+    lonely:'Feeling lonely is hard, especially during exam season. Try joining a study group or calling a friend. You are valued more than you know.',
+    sad:motivational[Math.floor(Math.random()*motivational.length)],
+    dull:'Low energy days happen to everyone. Try the 5-minute rule: study for just 5 minutes. Often you will keep going once started!',
+    angry:'Feeling frustrated is valid. Take a short break, go for a walk, and come back fresh. Channeling that energy into focused study can work wonders.',
+    happy:encouraging[0],
+    motivated:encouraging[Math.floor(Math.random()*encouraging.length)],
+    neutral:'Thank you for sharing your thoughts. Reflection is a sign of growth. Keep going!'
+  };
+  
+  var toneInstruction={
+    stressed:'The student is stressed. Be calming, empathetic and give practical de-stress tips.',
+    anxious:'The student feels anxious. Be very reassuring, warm and help them calm down with actionable steps.',
+    lonely:'The student feels lonely. Be warm and compassionate. Remind them they are not alone and suggest ways to connect.',
+    sad:'The student is sad. Be gentle, empathetic and motivating. Do not dismiss their feelings.',
+    dull:'The student feels dull and unmotivated. Be energizing and give practical motivation tricks for BTech students.',
+    angry:'The student is frustrated. Acknowledge their feelings first, then give calming and constructive advice.',
+    happy:'The student is happy. Be enthusiastic, encouraging and help them channel this positivity into studies.',
+    motivated:'The student is motivated. Celebrate their energy and give tips to maintain this productive mindset.',
+    neutral:'The student shared a neutral diary entry. Be warm, reflective and thoughtful.'
+  };
+  
+  var tone=toneInstruction[mood]||toneInstruction.neutral;
+  var prompt='BTech student diary entry: "'+text+'". Detected mood: '+mood+'. '+tone+' Write a short personal AI reflection (3-5 sentences) directly addressing the student. Do not be generic.';
+  var res=await callClaude(prompt);
+  setResult('diary-result', res||fallbackMap[mood]||fallbackMap.neutral);
+}
+
+function clearDiary(){
+  document.getElementById('diary-text').value='';
+  document.getElementById('diary-result').style.display='none';
+  document.getElementById('mood-bar').style.width='50%';
+  document.getElementById('mood-label').textContent='Mood: neutral';
+  document.getElementById('predict-wrap').innerHTML='';
+}
+
+async function genChecklist(){
+  var s=document.getElementById('check-subject').value;
+  if(!s){alert('Select a subject');return;}
+  var el=document.getElementById('checklist-result');
+  el.style.display='block';
+  el.innerHTML='<div style="padding:8px;color:var(--color-text-secondary)"><span class="spin">⟳</span> Generating checklist...</div>';
+  
+  var fallbackTopics={
+    'Data Structures & Algorithms':['Arrays & Strings','Linked Lists','Stacks & Queues','Trees & BST','Graphs','Sorting algorithms','Searching algorithms','Dynamic Programming','Greedy algorithms','Hashing'],
+    'Operating Systems':['Process management','CPU scheduling','Memory management','Virtual memory','File systems','Deadlocks','Synchronization','I/O management','Disk scheduling','Security'],
+    'Database Management Systems':['ER diagrams','Relational model','SQL queries','Joins & subqueries','Normalization','Transactions & ACID','Concurrency control','Indexing & B-trees','NoSQL basics','Query optimization'],
+    'Computer Networks':['OSI model','TCP/IP model','IP addressing & subnetting','Routing protocols','Transport layer (TCP/UDP)','Application layer protocols','Network security','Wireless networks','DNS & DHCP','Socket programming'],
+    'Machine Learning':['Supervised learning','Unsupervised learning','Linear regression','Classification algorithms','Decision trees','Neural networks basics','Model evaluation','Feature engineering','Overfitting & regularization','Clustering'],
+  };
+  
+  var defaultTopics=['Introduction & basics','Core concepts','Important algorithms/methods','Problem solving','Previous year questions','Revision & practice tests'];
+  var topics=fallbackTopics[s]||defaultTopics;
+  
+  var prompt='Create a BTech exam preparation checklist for '+s+'. List exactly 10 important topics to study, one per line, numbered 1-10. Keep each item concise (under 8 words).';
+  var res=await callClaude(prompt);
+  
+  var items=[];
+  if(res){
+    items=res.split('\n').filter(function(l){return l.trim().length>2;}).map(function(l){return l.replace(/^\d+[\.\)]\s*/,'').trim();}).filter(function(l){return l.length>0;}).slice(0,10);
+  }
+  if(items.length<3) items=topics;
+  
+  el.innerHTML='<div style="font-size:13px;font-weight:500;margin-bottom:8px;color:var(--color-text-secondary)">'+s+' — study checklist</div>';
+  items.forEach(function(item,i){
+    el.innerHTML+='<div class="checklist-item"><input type="checkbox" id="chk'+i+'" onchange="updateProgress()"><label for="chk'+i+'" style="cursor:pointer;flex:1">'+item+'</label></div>';
+  });
+  el.innerHTML+='<div style="margin-top:10px;font-size:13px;color:var(--color-text-secondary)" id="progress-txt">0 / '+items.length+' completed</div>';
+}
+
+function updateProgress(){
+  var total=document.querySelectorAll('#checklist-result input[type=checkbox]').length;
+  var done=document.querySelectorAll('#checklist-result input[type=checkbox]:checked').length;
+  var el=document.getElementById('progress-txt');
+  if(el) el.textContent=done+' / '+total+' completed';
+}
+
+var mockData=[];
+
+async function genMock(){
+  var s=document.getElementById('mock-subject').value;
+  if(!s){alert('Select a subject');return;}
+  var qEl=document.getElementById('mock-questions');
+  var rEl=document.getElementById('mock-result');
+  qEl.style.display='block';
+  rEl.style.display='none';
+  qEl.innerHTML='<div class="card" style="color:var(--color-text-secondary)"><span class="spin">⟳</span> Generating 5 questions...</div>';
+  
+  var prompt='Create a BTech mock test for '+s+'. Give exactly 5 multiple choice questions. Format each question as:\nQ: [question]\nA) [option]\nB) [option]\nC) [option]\nD) [option]\nANS: [correct letter]\n\nSeparate questions with a blank line.';
+  var res=await callClaude(prompt);
+  
+  mockData=[];
+  if(res){
+    var blocks=res.split(/\n\s*\n/).filter(function(b){return b.includes('Q:')&&b.includes('ANS:');});
+    blocks.slice(0,5).forEach(function(b){
+      var lines=b.split('\n').map(function(l){return l.trim();}).filter(Boolean);
+      var q=lines.find(function(l){return l.startsWith('Q:');});
+      var opts=['A','B','C','D'].map(function(lt){return lines.find(function(l){return l.startsWith(lt+')');});}).filter(Boolean);
+      var ans=lines.find(function(l){return l.startsWith('ANS:');});
+      if(q&&opts.length>=2&&ans){
+        mockData.push({q:q.replace('Q:','').trim(),opts:opts,ans:ans.replace('ANS:','').trim()});
+      }
+    });
+  }
+  
+  if(mockData.length===0){
+    mockData=[
+      {q:'What is the time complexity of binary search?',opts:['A) O(n)','B) O(log n)','C) O(n²)','D) O(1)'],ans:'B'},
+      {q:'Which data structure uses LIFO?',opts:['A) Queue','B) Heap','C) Stack','D) Array'],ans:'C'},
+      {q:'What does CPU stand for?',opts:['A) Core Processing Unit','B) Central Program Unit','C) Central Processing Unit','D) Computing Processing Unit'],ans:'C'},
+      {q:'Which layer handles routing in OSI?',opts:['A) Data Link','B) Transport','C) Session','D) Network'],ans:'D'},
+      {q:'SQL stands for?',opts:['A) Structured Query Language','B) Simple Query Language','C) Structured Question Language','D) System Query Language'],ans:'A'}
+    ];
+  }
+  
+  qEl.innerHTML='<div class="card"><div style="font-size:14px;font-weight:500;margin-bottom:12px">'+s+' — Mock Test</div>';
+  mockData.forEach(function(q,i){
+    qEl.innerHTML+='<div class="q-block"><p><strong>Q'+(i+1)+'.</strong> '+q.q+'</p>';
+    q.opts.forEach(function(opt){
+      var letter=opt[0];
+      qEl.innerHTML+='<label style="display:flex;align-items:center;gap:8px;font-size:13px;padding:4px 0;cursor:pointer"><input type="radio" name="q'+i+'" value="'+letter+'" style="width:14px;height:14px"> '+opt+'</label>';
+    });
+    qEl.innerHTML+='</div>';
+  });
+  qEl.innerHTML+='<button class="btn btn-primary" style="width:100%;margin-top:12px" onclick="submitMock()">Submit & Check Score ↗</button></div>';
+}
+
+async function submitMock(){
+  var correct=0;var feedback='';
+  mockData.forEach(function(q,i){
+    var sel=document.querySelector('input[name="q'+i+'"]:checked');
+    var given=sel?sel.value:'—';
+    var isRight=given===q.ans;
+    if(isRight) correct++;
+    feedback+='\nQ'+(i+1)+': '+(isRight?'Correct':'Wrong — Answer: '+q.ans);
+  });
+  var rEl=document.getElementById('mock-result');
+  rEl.style.display='block';
+  var pct=Math.round((correct/mockData.length)*100);
+  var grade=pct>=80?'Excellent!':pct>=60?'Good — keep practicing!':pct>=40?'Needs improvement':'Revise your basics';
+  rEl.innerHTML='<div class="card"><div class="score-box">'+correct+' / '+mockData.length+' correct ('+pct+'%)</div><div style="font-size:14px;font-weight:500;margin-bottom:8px">'+grade+'</div><div class="result-box" style="display:block;font-size:13px">'+feedback.trim()+'</div></div>';
+  var subject=document.getElementById('mock-subject').value;
+  var prompt='A BTech student scored '+correct+'/'+mockData.length+' in '+subject+'. Give brief feedback and 2-3 specific topics they should focus on. Keep it encouraging.';
+  var aiRes=await callClaude(prompt);
+  if(aiRes) rEl.querySelector('.result-box').textContent=feedback.trim()+'\n\n'+aiRes;
+}
+</script>
